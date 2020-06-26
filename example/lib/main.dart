@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
 import 'package:flutter_sunmi_printer/flutter_sunmi_printer.dart';
 
 void main() {
@@ -14,55 +11,48 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
   void _print() async {
-    // SunmiPrinter.startPrint();
-    // SunmiPrinter.reset();
+    // Test regular text
+    SunmiPrinter.hr();
     SunmiPrinter.text(
-      'left Underline',
-      styles: SunmiStyles(bold: false, underline: true, align: SunmiAlign.left),
-      // linesAfter: 0,
+      'Test Sunmi Printer',
+      styles: SunmiStyles(align: SunmiAlign.center),
+    );
+    SunmiPrinter.hr();
+
+    // Test align
+    SunmiPrinter.text(
+      'left',
+      styles: SunmiStyles(bold: true, underline: true),
     );
     SunmiPrinter.text(
-      'center Bold',
+      'center',
       styles:
-          SunmiStyles(bold: true, underline: false, align: SunmiAlign.center),
-      // linesAfter: 1,
+          SunmiStyles(bold: true, underline: true, align: SunmiAlign.center),
     );
     SunmiPrinter.text(
       'right',
-      styles:
-          SunmiStyles(bold: false, underline: false, align: SunmiAlign.right),
-      // linesAfter: 2,
+      styles: SunmiStyles(bold: true, underline: true, align: SunmiAlign.right),
     );
-    // SunmiPrinter.stopPrint();
-    SunmiPrinter.hr();
-    SunmiPrinter.emptyLines(2);
-  }
 
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // try {
-    //   platformVersion = await SunmiPrinter.platformVersion;
-    // } on PlatformException {
-    platformVersion = 'Failed to get platform version.';
-    // }
+    // Test text size
+    SunmiPrinter.text('Extra small text',
+        styles: SunmiStyles(size: SunmiSize.xs));
+    SunmiPrinter.text('Medium text', styles: SunmiStyles(size: SunmiSize.md));
+    SunmiPrinter.text('Large text', styles: SunmiStyles(size: SunmiSize.lg));
+    SunmiPrinter.text('Extra large text',
+        styles: SunmiStyles(size: SunmiSize.xl));
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
+    // Test row
+    SunmiPrinter.row(
+      cols: [
+        SunmiCol(text: 'col1', width: 4),
+        SunmiCol(text: 'col2', width: 4, align: SunmiAlign.center),
+        SunmiCol(text: 'col3', width: 4, align: SunmiAlign.right),
+      ],
+    );
 
-    setState(() {
-      _platformVersion = platformVersion;
-    });
+    SunmiPrinter.emptyLines(3);
   }
 
   @override
@@ -70,17 +60,17 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Test Sunmi Printer'),
         ),
         body: Column(
           children: <Widget>[
+            SizedBox(height: 50),
             Center(
-              child: Text('Running on: $_platformVersion\n'),
+              child: RaisedButton(
+                onPressed: _print,
+                child: const Text('Print demo', style: TextStyle(fontSize: 20)),
+              ),
             ),
-            RaisedButton(
-              onPressed: _print,
-              child: const Text('Print', style: TextStyle(fontSize: 20)),
-            )
           ],
         ),
       ),
