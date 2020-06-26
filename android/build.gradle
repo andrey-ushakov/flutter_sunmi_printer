@@ -16,6 +16,9 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
+        flatDir {
+            dirs project(':flutter_sunmi_printer').file('libs')
+        }
     }
 }
 
@@ -30,4 +33,10 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+}
+
+dependencies{
+    implementation(name: 'payLib', ext: 'aar')
+    // https://mvnrepository.com/artifact/com.google.zxing/core
+    compileOnly(name: 'core-3.4.0', ext: 'jar')
 }

@@ -22,15 +22,38 @@ class _MyAppState extends State<MyApp> {
     initPlatformState();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
+  void _print() async {
+    // SunmiPrinter.startPrint();
+    // SunmiPrinter.reset();
+    SunmiPrinter.text(
+      'left Underline',
+      styles: SunmiStyles(bold: false, underline: true, align: SunmiAlign.left),
+      // linesAfter: 0,
+    );
+    SunmiPrinter.text(
+      'center Bold',
+      styles:
+          SunmiStyles(bold: true, underline: false, align: SunmiAlign.center),
+      // linesAfter: 1,
+    );
+    SunmiPrinter.text(
+      'right',
+      styles:
+          SunmiStyles(bold: false, underline: false, align: SunmiAlign.right),
+      // linesAfter: 2,
+    );
+    // SunmiPrinter.stopPrint();
+    SunmiPrinter.hr();
+    SunmiPrinter.emptyLines(2);
+  }
+
   Future<void> initPlatformState() async {
     String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await FlutterSunmiPrinter.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
+    // try {
+    //   platformVersion = await SunmiPrinter.platformVersion;
+    // } on PlatformException {
+    platformVersion = 'Failed to get platform version.';
+    // }
 
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
@@ -49,8 +72,16 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+        body: Column(
+          children: <Widget>[
+            Center(
+              child: Text('Running on: $_platformVersion\n'),
+            ),
+            RaisedButton(
+              onPressed: _print,
+              child: const Text('Print', style: TextStyle(fontSize: 20)),
+            )
+          ],
         ),
       ),
     );

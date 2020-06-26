@@ -1,13 +1,13 @@
-import 'dart:async';
+/*
+ * flutter_sunmi_printer
+ * Created by Andrey U.
+ * 
+ * Copyright (c) 2020. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
 
-import 'package:flutter/services.dart';
+library flutter_sunmi_printer;
 
-class FlutterSunmiPrinter {
-  static const MethodChannel _channel =
-      const MethodChannel('flutter_sunmi_printer');
-
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
-}
+export './src/enums.dart';
+export './src/sunmi_printer.dart';
+export './src/sunmi_styles.dart';
