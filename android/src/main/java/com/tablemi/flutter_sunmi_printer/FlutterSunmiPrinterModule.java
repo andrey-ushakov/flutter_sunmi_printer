@@ -1,11 +1,16 @@
 package com.tablemi.flutter_sunmi_printer;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.tablemi.flutter_sunmi_printer.utils.AidlUtil;
 import com.tablemi.flutter_sunmi_printer.utils.Base64Utils;
 import com.tablemi.flutter_sunmi_printer.utils.BitmapUtil;
 import com.tablemi.flutter_sunmi_printer.utils.ESCUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class FlutterSunmiPrinterModule {
 
@@ -75,7 +80,56 @@ public class FlutterSunmiPrinterModule {
         setFontSize(DEFAULT_FONT_SIZE);
 
         // Reset styles
-        boldOff();
-        underlineOff();
+        if (bold) {
+            boldOff();
+        }
+        if (underline) {
+            underlineOff();
+        }
+    }
+
+    public void row(String colsStr, boolean bold, boolean underline, int textSize, int linesAfter) {
+        try {
+            // Set styles
+            if (bold) {
+                boldOn();
+            }
+            if (underline) {
+                underlineOn();
+            }
+
+            // Prepare row data
+            JSONArray cols = new JSONArray(colsStr);
+            String[] colsText = new String[cols.length()];
+            int[] colsWidth = new int[cols.length()];
+            int[] colsAlign = new int[cols.length()];
+            for (int i = 0; i < cols.length(); i++) {
+                JSONObject col = cols.getJSONObject(i);
+                String text = col.getString("text");
+                int width = col.getInt("width");
+                int align = col.getInt("align");
+                colsText[i] = text;
+                colsWidth[i] = width;
+                colsAlign[i] = align;
+            }
+
+            // Print row
+            setFontSize(textSize);
+            AidlUtil.getInstance().printTableItem(colsText, colsWidth, colsAlign);
+            if (linesAfter > 0) {
+                emptyLines(linesAfter);
+            }
+            setFontSize(DEFAULT_FONT_SIZE);
+
+            // Reset styles
+            if (bold) {
+                boldOff();
+            }
+            if (underline) {
+                underlineOff();
+            }
+        } catch (Exception err) {
+            Log.d("SunmiPrinter", err.getMessage());
+        }
     }
 }

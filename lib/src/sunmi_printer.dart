@@ -7,20 +7,24 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:flutter_sunmi_printer/src/enums.dart';
+import 'sunmi_col.dart';
 import 'sunmi_styles.dart';
 
 class SunmiPrinter {
   static const String RESET = "reset";
-  static const String START_PRINT = "startPrint";
-  static const String STOP_PRINT = "stopPrint";
-  static const String IS_PRINTING = "isPrinting";
-  static const String BOLD_ON = "boldOn";
-  static const String BOLD_OFF = "boldOff";
-  static const String UNDERLINE_ON = "underlineOn";
-  static const String UNDERLINE_OFF = "underlineOff";
+  // static const String START_PRINT = "startPrint";
+  // static const String STOP_PRINT = "stopPrint";
+  // static const String IS_PRINTING = "isPrinting";
+  // static const String BOLD_ON = "boldOn";
+  // static const String BOLD_OFF = "boldOff";
+  // static const String UNDERLINE_ON = "underlineOn";
+  // static const String UNDERLINE_OFF = "underlineOff";
   static const String EMPTY_LINES = "emptyLines";
   static const String PRINT_TEXT = "printText";
+  static const String PRINT_ROW = "printRow";
 
   static const MethodChannel _channel =
       const MethodChannel('flutter_sunmi_printer');
@@ -29,17 +33,17 @@ class SunmiPrinter {
     await _channel.invokeMethod(RESET);
   }
 
-  static Future<void> startPrint() async {
-    await _channel.invokeMethod(START_PRINT);
-  }
+  // static Future<void> startPrint() async {
+  //   await _channel.invokeMethod(START_PRINT);
+  // }
 
-  static Future<void> stopPrint() async {
-    await _channel.invokeMethod(STOP_PRINT);
-  }
+  // static Future<void> stopPrint() async {
+  //   await _channel.invokeMethod(STOP_PRINT);
+  // }
 
-  static Future<void> isPrinting() async {
-    await _channel.invokeMethod(IS_PRINTING);
-  }
+  // static Future<void> isPrinting() async {
+  //   await _channel.invokeMethod(IS_PRINTING);
+  // }
 
   /// Print [text] with [styles] and skip [linesAfter] after
   static Future<void> text(
@@ -47,7 +51,6 @@ class SunmiPrinter {
     SunmiStyles styles = const SunmiStyles(),
     int linesAfter = 0,
   }) async {
-    // Text
     await _channel.invokeMethod(PRINT_TEXT, {
       "text": text,
       "bold": styles.bold,
@@ -72,5 +75,33 @@ class SunmiPrinter {
     linesAfter = 0,
   }) async {
     await text(List.filled(len, ch[0]).join(), linesAfter: linesAfter);
+  }
+
+  /// Print a row.
+  ///
+  /// A row contains up to 12 columns. A column has a width between 1 and 12.
+  /// Total width of columns in one row must be equal to 12.
+  static Future<void> row({
+    List<SunmiCol> cols,
+    bool bold: false,
+    bool underline: false,
+    SunmiSize textSize: SunmiSize.md,
+    int linesAfter: 0,
+  }) async {
+    final isSumValid = cols.fold(0, (int sum, col) => sum + col.width) == 12;
+    if (!isSumValid) {
+      throw Exception('Total columns width must be equal to 12');
+    }
+
+    final colsJson = List<Map<String, String>>.from(
+        cols.map<Map<String, String>>((SunmiCol col) => col.toJson()));
+
+    await _channel.invokeMethod(PRINT_ROW, {
+      "cols": json.encode(colsJson),
+      "bold": bold,
+      "underline": underline,
+      "textSize": textSize.value,
+      "linesAfter": linesAfter,
+    });
   }
 }

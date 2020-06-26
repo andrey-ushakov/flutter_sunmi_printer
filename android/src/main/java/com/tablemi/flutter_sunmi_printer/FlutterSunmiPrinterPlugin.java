@@ -23,6 +23,7 @@ public class FlutterSunmiPrinterPlugin implements FlutterPlugin, MethodCallHandl
   private String UNDERLINE_OFF = "underlineOff";
   private String EMPTY_LINES = "emptyLines";
   private String PRINT_TEXT = "printText";
+  private String PRINT_ROW = "printRow";
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -74,6 +75,14 @@ public class FlutterSunmiPrinterPlugin implements FlutterPlugin, MethodCallHandl
     } else if (call.method.equals(EMPTY_LINES)) {
       int n = call.argument("n");
       flutterSunmiPrinterModule.emptyLines(n);
+      result.success(null);
+    } else if (call.method.equals(PRINT_ROW)) {
+      String cols = call.argument("cols");
+      boolean bold = call.argument("bold");
+      boolean underline = call.argument("underline");
+      int textSize = call.argument("textSize");
+      int linesAfter = call.argument("linesAfter");
+      flutterSunmiPrinterModule.row(cols, bold, underline, textSize, linesAfter);
       result.success(null);
     } else {
       result.notImplemented();
