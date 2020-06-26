@@ -10,9 +10,7 @@ import com.tablemi.flutter_sunmi_printer.utils.ESCUtil;
 public class FlutterSunmiPrinterModule {
 
     private static boolean isPrinting = false;
-    // public static int SMALL_FONT_SIZE = 18;
-    // public static int DEFAULT_FONT_SIZE = 24;
-    // public static int LARGE_FONT_SIZE = 36;
+    public static int DEFAULT_FONT_SIZE = 24;
 
     public void initAidl(Context context) {
         AidlUtil.getInstance().connectPrinterService(context);
@@ -55,7 +53,11 @@ public class FlutterSunmiPrinterModule {
         AidlUtil.getInstance().lineWrap(n);
     }
 
-    public void text(String text, int align, Boolean bold, Boolean underline, int linesAfter) {
+    public void setFontSize(int size) {
+        AidlUtil.getInstance().setFontSize(size);
+    }
+
+    public void text(String text, int align, boolean bold, boolean underline, int size, int linesAfter) {
         // Set styles
         if (bold) {
             boldOn();
@@ -65,10 +67,12 @@ public class FlutterSunmiPrinterModule {
         }
 
         // Print text
+        setFontSize(size);
         AidlUtil.getInstance().printTableItem(new String[] { text }, new int[] { 32 }, new int[] { align });
         if (linesAfter > 0) {
             emptyLines(linesAfter);
         }
+        setFontSize(DEFAULT_FONT_SIZE);
 
         // Reset styles
         boldOff();
