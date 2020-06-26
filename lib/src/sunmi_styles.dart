@@ -14,28 +14,11 @@ class SunmiStyles {
     this.bold = false,
     this.underline = false,
     this.align = SunmiAlign.left,
-  });
-
-  // Init all fields with default values
-  const SunmiStyles.defaults({
-    this.bold: false,
-    this.underline: false,
-    this.align: SunmiAlign.left,
+    this.size = SunmiSize.md,
   });
 
   final bool bold;
   final bool underline;
   final SunmiAlign align;
-
-  SunmiStyles copyWith({
-    bool bold,
-    bool underline,
-    SunmiAlign align,
-  }) {
-    return SunmiStyles(
-      bold: bold ?? this.bold,
-      underline: underline ?? this.underline,
-      align: align ?? this.align,
-    );
-  }
+  final SunmiSize size;
 }

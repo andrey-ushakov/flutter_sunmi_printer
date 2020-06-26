@@ -53,6 +53,7 @@ class SunmiPrinter {
       "bold": styles.bold,
       "underline": styles.underline,
       "align": styles.align.value,
+      "size": styles.size.value,
       "linesAfter": linesAfter,
     });
   }

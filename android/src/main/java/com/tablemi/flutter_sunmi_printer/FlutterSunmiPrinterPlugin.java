@@ -64,14 +64,15 @@ public class FlutterSunmiPrinterPlugin implements FlutterPlugin, MethodCallHandl
       result.success(null);
     } else if (call.method.equals(PRINT_TEXT)) {
       String text = call.argument("text");
-      Integer align = call.argument("align");
-      Boolean bold = call.argument("bold");
-      Boolean underline = call.argument("underline");
-      Integer linesAfter = call.argument("linesAfter");
-      flutterSunmiPrinterModule.text(text, align, bold, underline, linesAfter);
+      int align = call.argument("align");
+      boolean bold = call.argument("bold");
+      boolean underline = call.argument("underline");
+      int linesAfter = call.argument("linesAfter");
+      int size = call.argument("size");
+      flutterSunmiPrinterModule.text(text, align, bold, underline, size, linesAfter);
       result.success(null);
     } else if (call.method.equals(EMPTY_LINES)) {
-      Integer n = call.argument("n");
+      int n = call.argument("n");
       flutterSunmiPrinterModule.emptyLines(n);
       result.success(null);
     } else {
