@@ -26,5 +26,5 @@ flutter:
       android:
         package: com.tablemi.flutter_sunmi_printer
         pluginClass: FlutterSunmiPrinterPlugin
-      ios:
-        pluginClass: FlutterSunmiPrinterPlugin
+      # ios:
+      #   pluginClass: FlutterSunmiPrinterPlugin
