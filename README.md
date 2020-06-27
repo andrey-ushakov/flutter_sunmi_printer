@@ -6,13 +6,15 @@ Plugin allows to print thermal receipts using Sunmi device with a built-in print
 
 - `text`: print text with styles (bold, underline, align, font size)
 - `row`: print a row containing up to 12 columns (total columns width must be equal to 12)
+- `image`: print an image with alignment
 - `hr`: print full width separator
 - `emptyLines`: feed _n_ lines
+- `boldOn`, `boldOff`
+- `underlineOn`, `underlineOff`
 
 ## TODO
 
 - Print QR codes
-- Print images
 - Print Barcodes
 
 ## Getting Started

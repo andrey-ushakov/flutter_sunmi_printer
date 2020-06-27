@@ -1,3 +1,7 @@
+## 0.2.1
+
+- Update README and example
+
 ## 0.2.0
 
 - New functions: boldOn/boldOff
