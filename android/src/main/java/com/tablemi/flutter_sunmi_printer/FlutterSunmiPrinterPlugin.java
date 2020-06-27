@@ -24,6 +24,7 @@ public class FlutterSunmiPrinterPlugin implements FlutterPlugin, MethodCallHandl
   private String EMPTY_LINES = "emptyLines";
   private String PRINT_TEXT = "printText";
   private String PRINT_ROW = "printRow";
+  private String PRINT_IMAGE = "printImage";
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -95,6 +96,11 @@ public class FlutterSunmiPrinterPlugin implements FlutterPlugin, MethodCallHandl
       int textSize = call.argument("textSize");
       int linesAfter = call.argument("linesAfter");
       flutterSunmiPrinterModule.row(cols, bold, underline, textSize, linesAfter);
+      result.success(null);
+    } else if (call.method.equals(PRINT_IMAGE)) {
+      String base64 = call.argument("base64");
+      int align = call.argument("align");
+      flutterSunmiPrinterModule.printImage(base64, align);
       result.success(null);
     } else {
       result.notImplemented();

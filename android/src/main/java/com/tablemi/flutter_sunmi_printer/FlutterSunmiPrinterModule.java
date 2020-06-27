@@ -132,4 +132,16 @@ public class FlutterSunmiPrinterModule {
       Log.d("SunmiPrinter", err.getMessage());
     }
   }
+
+  public void printImage(String base64, int align) {
+    byte[] bytes = Base64Utils.decode(base64);
+    for (int i = 0; i < bytes.length; ++i) {
+      // ajust data
+      if (bytes[i] < 0) {
+        bytes[i] += 256;
+      }
+    }
+    AidlUtil.getInstance().printBitmap(BitmapUtil.convertToThumb(bytes, 280), align);
+    // AidlUtil.getInstance().lineWrap(1);
+  }
 }

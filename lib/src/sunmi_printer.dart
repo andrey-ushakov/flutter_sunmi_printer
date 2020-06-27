@@ -18,13 +18,14 @@ class SunmiPrinter {
   // static const String START_PRINT = "startPrint";
   // static const String STOP_PRINT = "stopPrint";
   // static const String IS_PRINTING = "isPrinting";
-  // static const String BOLD_ON = "boldOn";
-  // static const String BOLD_OFF = "boldOff";
-  // static const String UNDERLINE_ON = "underlineOn";
-  // static const String UNDERLINE_OFF = "underlineOff";
+  static const String BOLD_ON = "boldOn";
+  static const String BOLD_OFF = "boldOff";
+  static const String UNDERLINE_ON = "underlineOn";
+  static const String UNDERLINE_OFF = "underlineOff";
   static const String EMPTY_LINES = "emptyLines";
   static const String PRINT_TEXT = "printText";
   static const String PRINT_ROW = "printRow";
+  static const String PRINT_IMAGE = "printImage";
 
   static const MethodChannel _channel =
       const MethodChannel('flutter_sunmi_printer');
@@ -102,6 +103,32 @@ class SunmiPrinter {
       "underline": underline,
       "textSize": textSize.value,
       "linesAfter": linesAfter,
+    });
+  }
+
+  static Future<void> boldOn() async {
+    await _channel.invokeMethod(BOLD_ON);
+  }
+
+  static Future<void> boldOff() async {
+    await _channel.invokeMethod(BOLD_OFF);
+  }
+
+  static Future<void> underlineOn() async {
+    await _channel.invokeMethod(UNDERLINE_ON);
+  }
+
+  static Future<void> underlineOff() async {
+    await _channel.invokeMethod(UNDERLINE_OFF);
+  }
+
+  static Future<void> image(
+    String base64, {
+    SunmiAlign align: SunmiAlign.center,
+  }) async {
+    await _channel.invokeMethod(PRINT_IMAGE, {
+      "base64": base64,
+      "align": align.value,
     });
   }
 }

@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_sunmi_printer/flutter_sunmi_printer.dart';
 
 void main() {
@@ -51,6 +54,12 @@ class _MyAppState extends State<MyApp> {
         SunmiCol(text: 'col3', width: 4, align: SunmiAlign.right),
       ],
     );
+
+    // Test image
+    ByteData bytes = await rootBundle.load('assets/rabbit_black.jpg');
+    final buffer = bytes.buffer;
+    final imgData = base64.encode(Uint8List.view(buffer));
+    SunmiPrinter.image(imgData);
 
     SunmiPrinter.emptyLines(3);
   }

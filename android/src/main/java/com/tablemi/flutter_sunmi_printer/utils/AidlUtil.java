@@ -84,7 +84,6 @@ public class AidlUtil {
     public ICallback generateCB(final PrinterCallback printerCallback) {
         return new ICallback.Stub() {
 
-
             @Override
             public void onRunResult(boolean isSuccess) {
 
@@ -109,8 +108,8 @@ public class AidlUtil {
     /**
      * 设置打印浓度
      */
-    private int[] darkness = new int[]{0x0600, 0x0500, 0x0400, 0x0300, 0x0200, 0x0100, 0,
-            0xffff, 0xfeff, 0xfdff, 0xfcff, 0xfbff, 0xfaff};
+    private int[] darkness = new int[] { 0x0600, 0x0500, 0x0400, 0x0300, 0x0200, 0x0100, 0, 0xffff, 0xfeff, 0xfdff,
+            0xfcff, 0xfbff, 0xfaff };
 
     public void setDarkness(int index) {
         if (woyouService == null) {
@@ -235,23 +234,24 @@ public class AidlUtil {
             }
 
             woyouService.printTextWithFont(content, null, size, null);
-//            woyouService.lineWrap(3, null);
+            // woyouService.lineWrap(3, null);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
     /*
-     *打印图片
+     * 打印图片
      */
-    public void printBitmap(Bitmap bitmap) {
+    public void printBitmap(Bitmap bitmap, int align) {
         if (woyouService == null) {
             return;
         }
 
         try {
-            woyouService.setAlignment(1, null);
+            woyouService.setAlignment(align, null);
             woyouService.printBitmap(bitmap, null);
+            woyouService.lineWrap(1, null);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -265,11 +265,10 @@ public class AidlUtil {
         }
     }
 
-
     /**
      * 打印图片和文字按照指定排列顺序
      */
-    public void printBitmap(Bitmap bitmap, int orientation) {
+    public void printBitmap2(Bitmap bitmap, int orientation) {
         if (woyouService == null) {
             Toast.makeText(context, "服务已断开！", Toast.LENGTH_LONG).show();
             return;
@@ -337,7 +336,6 @@ public class AidlUtil {
             e.printStackTrace();
         }
     }
-
 
     public void sendRawData(byte[] data) {
         if (woyouService == null) {
