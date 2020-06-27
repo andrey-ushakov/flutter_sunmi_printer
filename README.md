@@ -60,5 +60,11 @@ SunmiPrinter.row(
     ],
 );
 
+// Test image
+ByteData bytes = await rootBundle.load('assets/rabbit_black.jpg');
+final buffer = bytes.buffer;
+final imgData = base64.encode(Uint8List.view(buffer));
+SunmiPrinter.image(imgData);
+
 SunmiPrinter.emptyLines(3);
 ```
