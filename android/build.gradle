@@ -3,8 +3,12 @@ version '1.0'
 
 buildscript {
     repositories {
-        google()
-        jcenter()
+        maven { url 'http://maven.aliyun.com/repository/google' }
+        maven { url 'http://maven.aliyun.com/repository/jcenter' }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/gradle-plugin' }
+        // google()
+        // jcenter()
     }
 
     dependencies {
@@ -14,8 +18,12 @@ buildscript {
 
 rootProject.allprojects {
     repositories {
-        google()
-        jcenter()
+        maven { url 'http://maven.aliyun.com/repository/google' }
+        maven { url 'http://maven.aliyun.com/repository/jcenter' }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/gradle-plugin' }
+        // google()
+        // jcenter()
         flatDir {
             dirs project(':flutter_sunmi_printer').file('libs')
         }
@@ -28,7 +36,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 19
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -37,6 +45,7 @@ android {
 
 dependencies{
     implementation(name: 'payLib', ext: 'aar')
+    implementation 'com.sunmi:printerlibrary:1.0.9'
     // https://mvnrepository.com/artifact/com.google.zxing/core
     compileOnly(name: 'core-3.4.0', ext: 'jar')
 }
