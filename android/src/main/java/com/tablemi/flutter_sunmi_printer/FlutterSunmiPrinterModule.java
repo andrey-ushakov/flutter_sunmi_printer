@@ -144,4 +144,8 @@ public class FlutterSunmiPrinterModule {
     InnerPrinterUtil.getInstance().printBitmap(BitmapUtil.convertToThumb(bytes, 280), align);
     // AidlUtil.getInstance().lineWrap(1);
   }
+
+  public void cutPaper() {
+    InnerPrinterUtil.getInstance().cutPaper();
+  }
 }

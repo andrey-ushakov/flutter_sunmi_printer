@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import woyou.aidlservice.jiuiv5.ICallback;
-
 public class InnerPrinterUtil {
     private static final String SERVICE＿PACKAGE = "woyou.aidlservice.jiuiv5";
 
@@ -359,6 +357,17 @@ public class InnerPrinterUtil {
             woyouService.enterPrinterBuffer(true);
             woyouService.sendRAWData(data, iCallback);
             woyouService.exitPrinterBufferWithCallback(true, iCallback);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 切⼑（切纸）
+     */
+    public void cutPaper() {
+        try {
+            woyouService.cutPaper(null);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
