@@ -3,7 +3,7 @@ package com.tablemi.flutter_sunmi_printer;
 import android.content.Context;
 import android.util.Log;
 
-import com.tablemi.flutter_sunmi_printer.utils.AidlUtil;
+import com.tablemi.flutter_sunmi_printer.utils.InnerPrinterUtil;
 import com.tablemi.flutter_sunmi_printer.utils.Base64Utils;
 import com.tablemi.flutter_sunmi_printer.utils.BitmapUtil;
 import com.tablemi.flutter_sunmi_printer.utils.ESCUtil;
@@ -18,12 +18,12 @@ public class FlutterSunmiPrinterModule {
   public static int DEFAULT_FONT_SIZE = 24;
 
   public void initAidl(Context context) {
-    AidlUtil.getInstance().connectPrinterService(context);
-    AidlUtil.getInstance().initPrinter();
+    InnerPrinterUtil.getInstance().connectPrinterService(context);
+    InnerPrinterUtil.getInstance().initPrinter();
   }
 
   public void reset() {
-    AidlUtil.getInstance().initPrinter();
+    InnerPrinterUtil.getInstance().initPrinter();
   }
 
   public void startPrint() {
@@ -39,27 +39,27 @@ public class FlutterSunmiPrinterModule {
   }
 
   public void boldOn() {
-    AidlUtil.getInstance().sendRawData(ESCUtil.boldOn());
+    InnerPrinterUtil.getInstance().sendRawData(ESCUtil.boldOn());
   }
 
   public void boldOff() {
-    AidlUtil.getInstance().sendRawData(ESCUtil.boldOff());
+    InnerPrinterUtil.getInstance().sendRawData(ESCUtil.boldOff());
   }
 
   public void underlineOn() {
-    AidlUtil.getInstance().sendRawData(ESCUtil.underlineWithOneDotWidthOn());
+    InnerPrinterUtil.getInstance().sendRawData(ESCUtil.underlineWithOneDotWidthOn());
   }
 
   public void underlineOff() {
-    AidlUtil.getInstance().sendRawData(ESCUtil.underlineOff());
+    InnerPrinterUtil.getInstance().sendRawData(ESCUtil.underlineOff());
   }
 
   public void emptyLines(int n) {
-    AidlUtil.getInstance().lineWrap(n);
+    InnerPrinterUtil.getInstance().lineWrap(n);
   }
 
   public void setFontSize(int size) {
-    AidlUtil.getInstance().setFontSize(size);
+    InnerPrinterUtil.getInstance().setFontSize(size);
   }
 
   public void text(String text, int align, boolean bold, boolean underline, int size, int linesAfter) {
@@ -73,7 +73,7 @@ public class FlutterSunmiPrinterModule {
 
     // Print text
     setFontSize(size);
-    AidlUtil.getInstance().printTableItem(new String[] { text }, new int[] { 32 }, new int[] { align });
+    InnerPrinterUtil.getInstance().printTableItem(new String[] { text }, new int[] { 32 }, new int[] { align });
     if (linesAfter > 0) {
       emptyLines(linesAfter);
     }
@@ -115,7 +115,7 @@ public class FlutterSunmiPrinterModule {
 
       // Print row
       setFontSize(textSize);
-      AidlUtil.getInstance().printTableItem(colsText, colsWidth, colsAlign);
+      InnerPrinterUtil.getInstance().printTableItem(colsText, colsWidth, colsAlign);
       if (linesAfter > 0) {
         emptyLines(linesAfter);
       }
@@ -141,7 +141,11 @@ public class FlutterSunmiPrinterModule {
         bytes[i] += 256;
       }
     }
-    AidlUtil.getInstance().printBitmap(BitmapUtil.convertToThumb(bytes, 280), align);
+    InnerPrinterUtil.getInstance().printBitmap(BitmapUtil.convertToThumb(bytes, 280), align);
     // AidlUtil.getInstance().lineWrap(1);
+  }
+
+  public void cutPaper() {
+    InnerPrinterUtil.getInstance().cutPaper();
   }
 }
