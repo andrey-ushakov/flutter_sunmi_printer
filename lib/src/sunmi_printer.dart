@@ -83,7 +83,7 @@ class SunmiPrinter {
   /// A row contains up to 12 columns. A column has a width between 1 and 12.
   /// Total width of columns in one row must be equal to 12.
   static Future<void> row({
-    List<SunmiCol> cols,
+    required List<SunmiCol> cols,
     bool bold: false,
     bool underline: false,
     SunmiSize textSize: SunmiSize.md,
