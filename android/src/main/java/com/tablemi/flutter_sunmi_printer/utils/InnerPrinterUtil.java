@@ -1,41 +1,36 @@
 package com.tablemi.flutter_sunmi_printer.utils;
 
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.os.IBinder;
 import android.os.RemoteException;
 import android.widget.Toast;
 
 import com.sunmi.pay.hardware.aidl.print.PrinterCallback;
-
+import com.sunmi.peripheral.printer.InnerPrinterCallback;
+import com.sunmi.peripheral.printer.InnerPrinterException;
+import com.sunmi.peripheral.printer.InnerPrinterManager;
+import com.sunmi.peripheral.printer.InnerResultCallbcak;
+import com.sunmi.peripheral.printer.SunmiPrinterService;
 import com.tablemi.flutter_sunmi_printer.entities.TableItem;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import woyou.aidlservice.jiuiv5.ICallback;
-import woyou.aidlservice.jiuiv5.IWoyouService;
-
-public class AidlUtil {
+public class InnerPrinterUtil {
     private static final String SERVICE＿PACKAGE = "woyou.aidlservice.jiuiv5";
-    private static final String SERVICE＿ACTION = "woyou.aidlservice.jiuiv5.IWoyouService";
 
-    private IWoyouService woyouService;
-    private static AidlUtil mAidlUtil = new AidlUtil();
-    private static final int LINE_BYTE_SIZE = 32;
+    private SunmiPrinterService woyouService;
+    private static InnerPrinterUtil mInnerPrinterUtil = new InnerPrinterUtil();
     private Context context;
 
-    private AidlUtil() {
+    private InnerPrinterUtil() {
     }
 
-    public static AidlUtil getInstance() {
-        return mAidlUtil;
+    public static InnerPrinterUtil getInstance() {
+        return mInnerPrinterUtil;
     }
 
     /**
@@ -45,11 +40,12 @@ public class AidlUtil {
      */
     public void connectPrinterService(Context context) {
         this.context = context.getApplicationContext();
-        Intent intent = new Intent();
-        intent.setPackage(SERVICE＿PACKAGE);
-        intent.setAction(SERVICE＿ACTION);
-        context.getApplicationContext().startService(intent);
-        context.getApplicationContext().bindService(intent, connService, Context.BIND_AUTO_CREATE);
+        try {
+            boolean result = InnerPrinterManager.getInstance().bindService(this.context,
+                    connService);
+        } catch (InnerPrinterException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -59,7 +55,12 @@ public class AidlUtil {
      */
     public void disconnectPrinterService(Context context) {
         if (woyouService != null) {
-            context.getApplicationContext().unbindService(connService);
+            try {
+                InnerPrinterManager.getInstance().unBindService(this.context,
+                        connService);
+            } catch (InnerPrinterException e) {
+                e.printStackTrace();
+            }
             woyouService = null;
         }
     }
@@ -68,22 +69,20 @@ public class AidlUtil {
         return woyouService != null;
     }
 
-    private ServiceConnection connService = new ServiceConnection() {
-
+    InnerPrinterCallback connService = new InnerPrinterCallback(){
         @Override
-        public void onServiceDisconnected(ComponentName name) {
-            woyouService = null;
+        protected void onConnected(SunmiPrinterService service){
+            woyouService = service;
         }
 
         @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            woyouService = IWoyouService.Stub.asInterface(service);
+        protected void onDisconnected() {
+            woyouService = null;
         }
     };
 
-    public ICallback generateCB(final PrinterCallback printerCallback) {
-        return new ICallback.Stub() {
-
+    public InnerResultCallbcak generateCB(final PrinterCallback printerCallback) {
+        return new InnerResultCallbcak() {
             @Override
             public void onRunResult(boolean isSuccess) {
 
@@ -349,7 +348,7 @@ public class AidlUtil {
         }
     }
 
-    public void sendRawDatabyBuffer(byte[] data, ICallback iCallback) {
+    public void sendRawDatabyBuffer(byte[] data, InnerResultCallbcak iCallback) {
         if (woyouService == null) {
             return;
         }
@@ -358,6 +357,17 @@ public class AidlUtil {
             woyouService.enterPrinterBuffer(true);
             woyouService.sendRAWData(data, iCallback);
             woyouService.exitPrinterBufferWithCallback(true, iCallback);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 切⼑（切纸）
+     */
+    public void cutPaper() {
+        try {
+            woyouService.cutPaper(null);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

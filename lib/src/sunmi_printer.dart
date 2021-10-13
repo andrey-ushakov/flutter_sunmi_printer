@@ -26,6 +26,7 @@ class SunmiPrinter {
   static const String PRINT_TEXT = "printText";
   static const String PRINT_ROW = "printRow";
   static const String PRINT_IMAGE = "printImage";
+  static const String CUT_PAPER = "cutPaper";
 
   static const MethodChannel _channel =
       const MethodChannel('flutter_sunmi_printer');
@@ -130,5 +131,9 @@ class SunmiPrinter {
       "base64": base64,
       "align": align.value,
     });
+  }
+
+  static Future<void> cutPaper() async {
+    await _channel.invokeMethod(CUT_PAPER);
   }
 }

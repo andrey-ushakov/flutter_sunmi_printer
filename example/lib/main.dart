@@ -62,6 +62,9 @@ class _MyAppState extends State<MyApp> {
     SunmiPrinter.image(imgData);
 
     SunmiPrinter.emptyLines(3);
+
+    // 切纸
+    SunmiPrinter.cutPaper();
   }
 
   @override
